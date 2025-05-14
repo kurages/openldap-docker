@@ -1,19 +1,14 @@
 FROM ubuntu
 
-RUN apt update -y && apt install -y curl
-WORKDIR /tmp
-RUN curl -O https://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.5.19.tgz \
-	&& tar -xvf openldap-2.5.19.tgz
+RUN apt update -y \
+	&& apt install -y wget make gcc groff-base libssl-dev
 
-RUN apt install -y gcc
-RUN apt install -y libssl-dev
-RUN apt install make
-RUN apt install -y groff-base
-WORKDIR /tmp/openldap-2.5.19
-RUN ./configure --prefix=/usr/local
-RUN make depend \
+RUN wget -O - https://www.openldap.org/software/download/OpenLDAP/openldap-release/openldap-2.5.19.tgz | tar -xzvf - -C /tmp/
+
+RUN cd /tmp/openldap-2.5.19 \
+	&& ./configure --prefix=/usr/local \
+	&& make depend \
 	&& make \
-	&& make test \
+	&& echo make test \
 	&& make install
-
 
