@@ -1,0 +1,25 @@
+services:
+  ldap:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      - INIT=false
+    volumes:
+      - "./data:/usr/local/var/openldap-data"
+      - "./slapd.conf:/usr/local/etc/openldap/slapd.conf:ro"
+      - "./slapd.d:/usr/local/etc/openldap/slapd.d"
+    ports:
+      - 389
+    expose:
+      - 389
+
+  ldap_admin:
+    image: osixia/phpldapadmin:0.9.0
+    container_name: phpldapadmin
+    environment:
+      PHPLDAPADMIN_LDAP_HOSTS: "ldap"
+      PHPLDAPADMIN_HTTPS: "false"
+    ports:
+      - "1080:80"
+

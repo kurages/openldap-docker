@@ -1,9 +1,16 @@
-#!/usr/local/bin/busybox ash
+#!/usr/local/bin/ash
 
-if [ ! -d /usr/local/var/openldap-data ]; then
-	/usr/local/sbin/slapadd -n 0 -F /usr/local/etc/slapd.d -l /usr/local/etc/openldap/slapd.ldif
-	mkdir -p /usr/local/var/openldap-data
+readonly CONF_FILE=/usr/local/etc/openldap/slapd.conf
+readonly CONF_DIR=/usr/local/etc/openldap/slapd.d
+readonly DATA_DIR=/usr/local/var/openldap-data
+
+mkdir -p $CONF_DIR $DATA_DIR
+
+if [ "$INIT" = "true" ]; then
+	slaptest -d 1 -f $CONF_FILE -F $CONF_DIR
+	echo success init configure
+	exit 0
 fi
 
-exec /usr/local/libexec/slapd "$@"
+exec /usr/local/libexec/slapd "$@" -h "ldap:/// ldapi:///"
 
