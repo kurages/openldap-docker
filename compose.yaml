@@ -1,16 +1,18 @@
+name: ldap
+
 services:
   ldap:
     build:
       context: .
       dockerfile: Dockerfile
     environment:
-      - INIT=false
+      - INIT=${INIT:-false}
     volumes:
-      - "./data:/usr/local/var/openldap-data"
+      - "data:/usr/local/var/openldap-data"
       - "./slapd.conf:/usr/local/etc/openldap/slapd.conf:ro"
-      - "./slapd.d:/usr/local/etc/openldap/slapd.d"
+      - "config:/usr/local/etc/openldap/slapd.d"
     ports:
-      - 389
+      - "389:389"
     expose:
       - 389
 
@@ -23,3 +25,6 @@ services:
     ports:
       - "1080:80"
 
+volumes:
+  data:
+  config:
