@@ -8,9 +8,7 @@ mkdir -p $CONF_DIR $DATA_DIR
 
 if [ "$INIT" = "true" ]; then
 	slaptest -d 1 -f $CONF_FILE -F $CONF_DIR
-	echo success init configure
-	exit 0
+	exit $?
 fi
 
 exec /usr/local/libexec/slapd "$@" -h "ldap:/// ldapi:///"
-
