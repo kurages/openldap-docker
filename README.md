@@ -12,6 +12,7 @@ INIT=true docker compose up ldap
 
 ```sh
 docker compose up -d
+docker compose exec -it ldap ldapadd -f /ldif/example.ldif -x -D "cn=Manager,dc=example,dc=com" -W
 ```
 
 ### debug
@@ -22,5 +23,4 @@ docker run -it --rm $(docker build -q --target builder-openldap .)
 # artifact stage
 docker run -it --rm --entrypoint=ash  $(docker build -q .)
 ```
-
 

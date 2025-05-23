@@ -47,7 +47,11 @@ RUN cd /tmp/openldap-${OPENLDAP_VERSOIN} \
 COPY docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
 RUN chmod +x /usr/local/bin/docker-entrypoint.sh
 
+# -----------------------------------------------------------------------------
 FROM debian:12.10-slim
+
+EXPOSE 389
+VOLUME /usr/local/var/openldap-data /usr/local/etc/openldap/slapd.d
 
 RUN apt update -y \
 	&& apt-get install -y \
@@ -62,4 +66,3 @@ ENV LD_LIBRARY_PATH=/usr/local/lib
 COPY --from=builder /usr/local /usr/local
 
 ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
-CMD ["-F", "/usr/local/etc/openldap/slapd.d", "-h", "ldap:/// ldapi:///"]
